@@ -25,8 +25,13 @@ function checkLogin(username, password){
          },
     
     success: function (data) {
-     console.table(data);
-     window.location.href = "AHome.html";
+        if (data[0].Permission.toLowerCase() === "admin") {
+            window.location.href = "AHome.html";
+        }else if(data[0].Permission.toLowerCase() === "manager"){
+            window.location.href = "manager.html";
+        }else{
+            window.location.href = "user.html";
+        }
     },
     error: function (jqXHR,xhr, ajaxOptions, thrownError) {
         console.log("+++++++++++++++++++++++++  Bot notification failed, error is '" + thrownError + "'");
@@ -40,4 +45,5 @@ function fnLogout(){
     localStorage.removeItem("logUsername");
     localStorage.removeItem("logPassword");
     alert("Logout success");
+    window.location.href = "index.html";
 }

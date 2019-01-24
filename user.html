@@ -7,14 +7,11 @@
     <title>Document</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 
-   
     <script src="js/index.js"></script>
 </head>
 <body>
-<h1>Admin</h1>
-    
-<input type="button" value="Logout" onclick="fnLogout()">
-    
+    <h1>user</h1>
+    <input type="button" value="Logout" onclick="fnLogout()">
 </body>
 <script>
 $( document ).ready(function() {
@@ -34,7 +31,7 @@ $( document ).ready(function() {
   //console.table(data);
   console.log(data[0].Permission.toLowerCase());
   console.log(localStorage.logUsername);
-  if (data[0].Permission.toLowerCase() === "admin") {
+  if (data[0].Permission.toLowerCase() === "user") {
      
  }else{
     window.location.href = "index.html";

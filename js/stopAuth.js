@@ -12,14 +12,21 @@ $( document ).ready(function() {
          },
     
     success: function (data) {
-     console.table(data);
-   
-
-     
+     //console.table(data);
+     console.log(data[0].Permission.toLowerCase());
+     console.log(localStorage.logUsername);
+     if (data[0].Permission.toLowerCase() === "admin") {
+        
+    }else if(data[0].Permission.toLowerCase() === "manager"){
+        
+    }else{
+        
+    }
+  
     },
     error: function (jqXHR,xhr, ajaxOptions, thrownError) {
         console.log("+++++++++++++++++++++++++  Bot notification failed, error is '" + thrownError + "'");
-        alert('check !');
+      //  alert('check !');
         window.location.href = "index.html";
     }
 });
