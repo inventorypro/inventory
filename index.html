@@ -1,24 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+        crossorigin="anonymous">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 
 
     <script src="js/startAuth.js"></script>
     <script src="js/index.js"></script>
+
 </head>
+
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+</style>
+
 <body>
-<h1>Login</h1>
-    
-<input type="text" id="txtUsername"></body>
-
-<input type="text" id="txtPassword"></body>
-
-<input type="button" value="submit" onclick="fnLogin()">
+    <div class="card" style="width: 30rem; margin-top: 8%; margin-left: auto; margin-right: auto;">
+        <div class="card-body">
+            <img src="img/bpk2.jpg" style="width:100%; display: block; border-radius: 10px;"><br>
+            <form>
+                <div class="form-group">
+                    <input type="email" class="form-control" id="txtUsername" placeholder="Username">
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-control" id="txtPassword" placeholder="Password">
+                </div>
+                <div class="form-group form-check">
+                    <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                    <label class="form-check-label" for="exampleCheck1">Forget password</label>
+                </div>
+                <button type="button" value="submit" onclick="fnLogin()" class="btn btn-primary btn-lg btn-block">LOGIN</button>
+            </form>
+        </div>
+    </div>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+        crossorigin="anonymous"></script>
+</body>
 
 </html>
