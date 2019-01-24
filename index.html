@@ -1,48 +1,51 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html>
 <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Lumino - Login</title>
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<link href="css/datepicker3.css" rel="stylesheet">
+	<link href="css/styles.css" rel="stylesheet">
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
-        crossorigin="anonymous">
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-    <script src="js/startAuth.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	<script src="js/startAuth.js"></script>
     <script src="js/index.js"></script> 
+	<!--[if lt IE 9]>
+	<script src="js/html5shiv.js"></script>
+	<script src="js/respond.min.js"></script>
+	<![endif]-->
 </head>
-
-<style>
-    body {
-        background-color: #f8f9fa;
-    }
-</style>
 <body>
+	<div class="row">
+		<div class="col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-md-4 col-md-offset-4">
+			<div class="login-panel panel panel-default">
+				<div class="panel-heading">Log in</div>
+				<div class="panel-body">
+					<form role="form">
+						<fieldset>
+							<div class="form-group">
+								<input class="form-control" placeholder="E-mail" name="email" type="email" id="txtUsername" autofocus="">
+							</div>
+							<div class="form-group">
+								<input class="form-control" placeholder="Password" name="password"  id="txtPassword" type="password" value="">
+							</div>
+							<div class="checkbox">
+								<label>
+									<input name="remember" type="checkbox" value="Remember Me">Remember Me
+								</label>
+							</div>
+							<button type="button" value="submit" onclick="fnLogin()" class="btn btn-primary btn-lg btn-block">LOGIN</button>
 
-    <div class="card" style="width: 30rem; margin-top: 8%; margin-left: auto; margin-right: auto;">
-        <div class="card-body">
-            <img src="img/bpk2.jpg" style="width:100%; display: block; border-radius: 10px;"><br>
-            <form>
-                <div class="form-group">
-                    <input type="email" class="form-control" id="txtUsername" placeholder="Username">
-                </div>
-                <div class="form-group">
-                    <input type="password" class="form-control" id="txtPassword" placeholder="Password">
-                </div>
-                <div class="form-group form-check">
+					</form>
+				</div>
+			</div>
+		</div><!-- /.col-->
+	</div><!-- /.row -->	
+	
 
-                    <p><a href="https://www.computerhope.com/" style="text-decoration: none">Forget password</a></p>
-                  
-                </div>
-                <button type="button" value="submit" onclick="fnLogin()" class="btn btn-primary btn-lg btn-block">LOGIN</button>
-            </form>
-        </div>
-    </div>
-
+<script src="js/jquery-1.11.1.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
 </body>
 </html>

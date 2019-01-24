@@ -44,6 +44,8 @@ function checkLogin(username, password){
 function fnLogout(){
     localStorage.removeItem("logUsername");
     localStorage.removeItem("logPassword");
-    alert("Logout success");
+  
     window.location.href = "index.html";
+    alert("Logout success");
 }
+
