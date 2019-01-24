@@ -15,13 +15,23 @@ $( document ).ready(function() {
      //console.table(data);
      console.log(data[0].Permission.toLowerCase());
      console.log(localStorage.logUsername);
-     if (data[0].Permission.toLowerCase() === "admin") {
+  
+
+    try {
+        if (data[0].Permission.toLowerCase() === "admin") {
         
-    }else if(data[0].Permission.toLowerCase() === "manager"){
+        }else if(data[0].Permission.toLowerCase() === "manager"){
+            
+        }else{
+            
+        }
         
-    }else{
+      }
+      catch(err) {
         
-    }
+       // window.location.href = "index.html";
+        alert(err.message);
+      }
   
     },
     error: function (jqXHR,xhr, ajaxOptions, thrownError) {

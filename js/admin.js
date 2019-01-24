@@ -13,14 +13,25 @@ $( document ).ready(function() {
     
     success: function (data) {
      //console.table(data);
-     console.log(data[0].Permission.toLowerCase());
-     console.log(localStorage.logUsername);
-     if (data[0].Permission.toLowerCase() === "admin") {
-       document.getElementById("myUsername").innerHTML = data[0].EMP_EngName;
-    }else{
-       window.location.href = "index.html";
-    }
-   
+    // console.log(data[0].Permission.toLowerCase());
+     //console.log(localStorage.logUsername);
+
+
+    try {
+        if (data[0].Permission.toLowerCase() === "admin") {
+            document.getElementById("myUsername").innerHTML = data[0].EMP_EngName;
+         }else{
+            window.location.href = "index.html";
+         }
+        
+      }
+      catch(err) {
+        
+        window.location.href = "index.html";
+        alert(err.message);
+      }
+
+
     },
     error: function (jqXHR,xhr, ajaxOptions, thrownError) {
         console.log("+++++++++++++++++++++++++  Bot notification failed, error is '" + thrownError + "'");

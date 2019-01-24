@@ -25,21 +25,31 @@ function checkLogin(username, password){
          },
     
     success: function (data) {
-        if (data[0].Permission.toLowerCase() === "admin") {
-            window.location.href = "AHome.html";
-        }else if(data[0].Permission.toLowerCase() === "manager"){
-            window.location.href = "manager.html";
-        }else{
-            window.location.href = "user.html";
-        }
+        
+        try {
+            if (data[0].Permission.toLowerCase() === "admin") {
+                window.location.href = "AHome.html";
+            }else if(data[0].Permission.toLowerCase() === "manager"){
+                window.location.href = "manager.html";
+            }else{
+                window.location.href = "user.html";
+            }
+          }
+          catch(err) {
+      
+            alert(err.message);
+          }
+
+        
     },
     error: function (jqXHR,xhr, ajaxOptions, thrownError) {
         console.log("+++++++++++++++++++++++++  Bot notification failed, error is '" + thrownError + "'");
         alert('Failed to login user profile !');
-        window.location.href = "index.html";
+        //window.location.href = "index.html";
     }
 });
 }
+
 
 function fnLogout(){
     localStorage.removeItem("logUsername");
