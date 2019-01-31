@@ -13,19 +13,19 @@ checkLogin(localStorage.logUsername,localStorage.logPassword);
 }
 
 function checkLogin(username, password){
-    console.log(password);
+    console.log(username);
 
     $.ajax({
       
         type: "GET",
-        url: "http://localhost:51940/api/UserPermission",
+        url: "http://localhost:60443/api/UserPermission",
         dataType: 'json',
          headers :{
           'Authorization':'basic '+btoa(localStorage.logUsername + ':' + localStorage.logPassword)
          },
     
     success: function (data) {
-        
+        localStorage.setItem("logSite", data[0].SITES.toLowerCase() );
         try {
             if (data[0].Permission.toLowerCase() === "admin") {
                 window.location.href = "AHome.html";
@@ -54,8 +54,9 @@ function checkLogin(username, password){
 function fnLogout(){
     localStorage.removeItem("logUsername");
     localStorage.removeItem("logPassword");
-  
+    localStorage.removeItem("logSite");
     window.location.href = "index.html";
     alert("Logout success");
 }
+
 

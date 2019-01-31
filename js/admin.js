@@ -5,7 +5,7 @@ $( document ).ready(function() {
     $.ajax({
       
         type: "GET",
-        url: "http://localhost:51940/api/UserPermission",
+        url: "http://localhost:60443/api/UserPermission",
         dataType: 'json',
          headers :{
           'Authorization':'basic '+btoa(localStorage.logUsername + ':' + localStorage.logPassword)

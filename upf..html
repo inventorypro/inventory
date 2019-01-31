@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title></title>
+    <meta charset="utf-8" />
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+</head>
+
+<body>
+    <!-- <form>
+        <div>
+            <label for="fileUpload" />
+            Select File to Upload: <input id="fileUpload" type="file" />
+
+            <input id="btnUploadFile" type="button" value="Upload File" />
+        </div>
+    </form>
+</body>
+</html>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $('#btnUploadFile').on('click', function () {
+
+            var x = document.getElementById("fileUpload").name = "newFileName";
+
+            var data = new FormData();
+
+            var files = $("#fileUpload").get(0).files;
+       
+            console.log(files[0].name);
+            console.log(files[0]);
+
+         
+            // // Add the uploaded image content to the form data collection
+         if (files.length > 0) {
+                 data.append("UploadedImage", files[0]);
+        }
+
+            // Make Ajax request with the contentType = false, and procesDate = false
+            $.ajax({
+                type: "POST",
+                url: "http://localhost:51940/api/UploadFile",
+                contentType: false,
+                processData: false,
+                data: data,   
+                success: function (d) {
+                       alert('file is uploaded successfully')
+                    },
+                    error: function () {
+                        alert('Some thing went wrong');
+                    }
+            });
+        });
+    });
+</script> -->
+
+
+    <h2>fileupload</h2>
+    <!-- <div>
+
+        <div class="form-group">
+            <input type="file" id="myfileUpload" accept="image/x-png,image/gif,image/jpeg" />
+
+
+        </div>
+        <input id="btnUploadImg" class="btn btn-default" type="button" value="Upload" />
+    </div> -->
+
+
+    <script>
+        $(document).ready(function () {
+            //** upload my local
+            // function readURL(input) {
+
+            //     if (input.files && input.files[0]) {
+            //         var reader = new FileReader();
+
+            //         reader.onload = function (e) {
+            //             $('#blah').attr('src', e.target.result);
+            //         }
+
+            //         reader.readAsDataURL(input.files[0]);
+            //     }
+            // }
+
+            // $("#myfileUpload").change(function () {
+
+            //     var fileName = document.getElementById("myfileUpload").value;
+            //     var idxDot = fileName.lastIndexOf(".") + 1;
+            //     var extFile = fileName.substr(idxDot, fileName.length).toLowerCase();
+            //     if (extFile == "jpg" || extFile == "jpeg" || extFile == "png") {
+            //         readURL(this);
+            //     } else {
+            //         $('#myfileUpload').val("");
+            //         alert("Only jpg/jpeg and png files are allowed!");
+            //     }
+            // });
+
+            // $('#btnUploadImg').click(function () {
+            //     if ($('#myfileUpload').val() == '') {
+            //         alert('Please select file');
+            //         return;
+            //     }
+
+            //     var formData = new FormData();
+            //     var file = $('#myfileUpload')[0];
+            //     formData.append('file', file.files[0]);
+            //     $.ajax({
+
+            //         // url: 'https://inventoryservicev125620130114350.azurewebsites.net/api/fileupload',
+            //         url: 'http://localhost:60443/api/fileupload',
+            //         type: 'POST',
+            //         data: formData,
+            //         contentType: false,
+            //         processData: false,
+            //         headers: {
+            //             'Authorization': 'basic ' + btoa(localStorage.logUsername + ':' + localStorage.logPassword)
+            //         },
+
+            //         success: function (data) {
+            //             var path = data;
+            //             var path2 = path.replace(/\\/g, "/");
+            //             console.log(path2);
+            //             console.log(data);
+            //             alert('file is uploaded successfully')
+            //         },
+            //         error: function (jqXHR, xhr, ajaxOptions, thrownError) {
+            //             alert(ajaxOptions);
+            //         }
+            //     });
+            // });
+
+            function readURL(input) {
+
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        $('#blah').attr('src', e.target.result);
+                    }
+
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+            $("#myfileUpload").change(function () {
+
+                var fileName = document.getElementById("myfileUpload").value;
+                var idxDot = fileName.lastIndexOf(".") + 1;
+                var extFile = fileName.substr(idxDot, fileName.length).toLowerCase();
+                if (extFile == "jpg" || extFile == "jpeg" || extFile == "png") {
+                    readURL(this);
+                } else {
+                    $('#myfileUpload').val("");
+                    alert("Only jpg/jpeg and png files are allowed!");
+                }
+            });
+
+            $('input[type=file]').on("change", function () {
+
+                var $files = $(this).get(0).files;
+
+                if ($files.length) {
+
+                    // Reject big files
+                    if ($files[0].size > $(this).data("max-size") * 1024) {
+                        console.log("Please select a smaller file");
+                        return false;
+                    }
+
+                    // Replace ctrlq with your own API key
+                    var apiUrl = 'https://api.imgur.com/3/image';
+                    var apiKey = 'b8732e440376e3d';
+
+                    var formData = new FormData();
+                    formData.append("image", $files[0]);
+
+                    var settings = {
+                        "async": true,
+                        "crossDomain": true,
+                        "url": apiUrl,
+                        "method": "POST",
+                        "datatype": "json",
+                        "headers": {
+                            "Authorization": "Client-ID " + apiKey
+                        },
+                        "processData": false,
+                        "contentType": false,
+                        "data": formData,
+                        beforeSend: function (xhr) {
+                            console.log("Uploading...");
+                        },
+                        success: function (res) {
+                            console.log(res.data.link);
+                            // $('body').append('<img src="' + res.data.link + '" />');
+                        },
+                        error: function () {
+                            alert("Failed");
+                        }
+                    }
+                    $.ajax(settings).done(function (response) {
+                        console.log("Done");
+                    });
+                }
+            });
+
+
+        });
+    </script>
+    <form id="imgur">
+        <input type="file" id="myfileUpload" accept="image/*" data-max-size="5000" />
+        <img id="blah" height="200" src="#" alt="your image" />
+    </form>
+</body>
+
+</html>

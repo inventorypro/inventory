@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.colVis.min.js"></script>
+
+    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
+
+
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+    <!-- <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css"> -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.5.2/css/buttons.dataTables.min.css">
+
+    <script src="js/addNewProduct.js"></script>
+    <link rel="stylesheet" href="css/index.css">
+</head>
+<style>
+
+</style>
+
+<body>
+
+
+    <script>
+
+
+        $(document).ready(function () {
+
+            console.log(localStorage.logSite);
+
+
+            $.ajax({
+
+                type: "GET",
+                url: "http://localhost:60443/api/IN_Product?sites=" + "all",
+                dataType: 'json',
+                headers: {
+                    'Authorization': 'basic ' + btoa(localStorage.logUsername + ':' + localStorage.logPassword)
+                },
+
+                success: function (data) {
+
+                    // console.table(data);
+
+
+
+                    var datatable = $('#example').DataTable({
+                        responsive: true,
+                        dom: 'Bfrtip',
+
+                        buttons: [
+                            'copy', 'csv', 'excel', 'pdf',
+                            {
+                                extend: 'collection',
+                                text: 'Table control',
+                                autoClose: true,
+                                buttons: [
+                                    'colvis'
+                                ]
+                            }
+
+                        ],
+                        "data": data,
+                        "columns": [
+                            {
+                                "data": "ProductID", render: function (data, type, row, meta) {
+                                    return type === 'display' ?
+                                        '<center><input type="checkbox"  class="form-check-input" name="deleteMulti" value="' + row.ProductID + '"></center>' :
+                                        data;
+                                }
+                            },
+                            { "data": "ProductID" },
+                            { "data": "ProductName" },
+                            { "data": "Category" },
+                            { "data": "UnitType" },
+                            { "data": "Price" },
+                            { "data": "MinValue" },
+                            { "data": "MaxValue" },
+                            { "data": "ProductStatus" },
+                            {
+                                "data": "ProductID", visible: false, render: function (data, type, row, meta) {
+                                    return type === 'display' ?
+                                        '<img id="blah" height="100" src="' + row.ImgProduct + '" alt="your image" />' :
+                                        data;
+                                }
+
+                            },
+                            { "data": "Amount" },
+                            { "data": "SITES" },
+                            {
+                                "data": "ProductID", render: function (data, type, row, meta) {
+                                    return type === 'display' ?
+                                        '    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal" onclick="ShowDataEditor(' + row.ProductID + ')">Edit </button>' :
+                                        data;
+                                },
+
+                            },
+                            {
+                                "data": "ProductID", render: function (data, type, row, meta) {
+                                    return type === 'display' ?
+                                        '    <button type="button" class="btn btn-danger" onclick="btnDelete(' + row.ProductID + ')">delete </button>' :
+                                        data;
+                                },
+
+                            }
+
+
+
+                        ]
+
+
+
+
+                    });
+
+
+                    // for(var i = 0 ; i <= data.length ; i++){
+                    //     $( ".getMyProduct" ).append( "<p>"+data[i].ProductID +"</p>" );
+                    // }
+                },
+                error: function (jqXHR, xhr, ajaxOptions, thrownError) {
+                    console.log("+++++++++++++++++++++++++  Bot notification failed, error is '" + thrownError + "'");
+                    // alert('check !');
+
+                }
+
+            });
+
+
+            $('#example tbody').on('click', 'tr', function () {
+                $(this).toggleClass('selected');
+            });
+
+            $('#button').click(function () {
+                alert(datatable.rows('.selected').data().length + ' row(s) selected');
+            });
+
+
+
+        });
+
+        function btnDelete(idVal) {
+            var showCfDelete = confirm("Are you sure you want to delete this product?");
+            if (showCfDelete == true) {
+                txtShow = "You delete success!";
+
+                $.ajax({
+
+                    type: "DELETE",
+                    url: "http://localhost:60443/api/IN_Product/" + idVal,
+                    dataType: 'json',
+                    headers: {
+                        'Authorization': 'basic ' + btoa(localStorage.logUsername + ':' + localStorage.logPassword)
+                    },
+
+                    success: function (data) {
+                        console.log("success");
+                    },
+                    error: function (jqXHR, xhr, ajaxOptions, thrownError) {
+                        console.log("Your can't delete, error is '" + thrownError + "'");
+                        //window.location.href = "index.html";
+                    }
+                });
+
+                alert(txtShow);
+                location.reload();
+            } else {
+
+
+            }
+
+        }
+
+        function toggleCheckbox(source) {
+            checkboxes = document.getElementsByName('deleteMulti');
+            for (var i = 0, n = checkboxes.length; i < n; i++) {
+                checkboxes[i].checked = source.checked;
+            }
+        }
+
+        function multiDelete() {
+
+
+            var items = document.getElementsByName('deleteMulti');
+            var selectedItems = [];;
+            for (var i = 0; i < items.length; i++) {
+                if (items[i].type == 'checkbox' && items[i].checked == true) {
+                    selectedItems[i] = items[i].value;
+                }
+
+
+                // ccnMultiDelete(items[i].value);
+            }
+            if (selectedItems.length === 0) {
+                alert("You have not selected data!");
+            } else {
+                var multiCfDelete = confirm("Are you sure you want to delete this product?");
+                if (multiCfDelete == true) {
+                    for (var i = 0; i < selectedItems.length; i++) {
+                        if (selectedItems[i] !== undefined) {
+                            ccnMultiDelete(selectedItems[i])
+
+
+                        }
+                    }
+
+                    alert("You delete success!");
+                    location.reload();
+                }
+
+            }
+
+
+
+        }
+
+        function ccnMultiDelete(getIdDelete) {
+            $.ajax({
+
+                type: "DELETE",
+                url: "http://localhost:60443/api/IN_Product/" + getIdDelete,
+                dataType: 'json',
+                headers: {
+                    'Authorization': 'basic ' + btoa(localStorage.logUsername + ':' + localStorage.logPassword)
+                },
+
+                success: function (data) {
+                    console.log("success " + data);
+                },
+                error: function (jqXHR, xhr, ajaxOptions, thrownError) {
+                    console.log("Your can't delete, error is '" + thrownError + "'");
+                    //window.location.href = "index.html";
+                }
+            });
+
+        }
+
+        function ShowDataEditor(a) {
+            $.ajax({
+
+                type: "GET",
+                url: "http://localhost:60443/api/IN_Product/" + a,
+                dataType: 'json',
+                headers: {
+                    'Authorization': 'basic ' + btoa(localStorage.logUsername + ':' + localStorage.logPassword)
+                },
+
+                success: function (data) {
+                    console.log(data);
+                    document.getElementById("editProductID").value = data.ProductID;
+                    document.getElementById("editProductName").value = data.ProductName;
+                    document.getElementById("editCategory").value = data.Category;
+                    document.getElementById("editUnitType").value = data.UnitType;
+                    document.getElementById("editPrice").value = data.Price;
+                    document.getElementById("editMinValue").value = data.MinValue;
+                    document.getElementById("editMaxValue").value = data.MaxValue;
+                    document.getElementById("editProductStatus").value = data.ProductStatus;
+                    document.getElementById("editAmount").value = data.Amount;
+                    document.getElementById("editSITES").value = data.SITES;
+                    document.getElementById("editImgProduct").value = data.ImgProduct; editUnitType
+
+                },
+                error: function (jqXHR, xhr, ajaxOptions, thrownError) {
+                    console.log("+++++++++++++++++++++++++  Bot notification failed, error is '" + thrownError + "'");
+                    //window.location.href = "index.html";
+                }
+            });
+        }
+
+        function deleteDataProduct(a) {
+            // var getA = a;
+            // var x = document.getElementById("addProductName"+getA).value;
+
+            // alert(getA+":"+x);
+            alert(a);
+
+        }
+
+        function addNewProduct() {
+
+
+            var formdata = {
+                ProductID: $('#addProductID').val(),
+                ProductName: $('#addProductName').val(),
+                Category: $('#addCategory').val(),
+                UnitType: $('#addUnitType').val(),
+                Price: $('#addPrice').val(),
+                MinValue: $('#addMinValue').val(),
+                MaxValue: $('#addMaxValue').val(),
+                ProductStatus: "true",
+                ImgProduct: $('#addImgProduct').val(),
+                Amount: $('#addAmount').val(),
+                SITES: localStorage.logSite
+            }
+
+            $.ajax({
+
+                type: "POST",
+                url: "http://localhost:60443/api/IN_Product",
+                dataType: 'json',
+                data: formdata,
+                headers: {
+                    'Authorization': 'basic ' + btoa(localStorage.logUsername + ':' + localStorage.logPassword)
+                },
+                success: function (data) {
+                    console.table(data);
+                },
+                error: function (jqXHR, xhr, ajaxOptions, thrownError) {
+                    console.log("Add new product failed, error is '" + thrownError + "'");
+
+                }
+
+            });
+        }
+
+        $('#exampleModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget) // Button that triggered the modal
+            var recipient = button.data('whatever') // Extract info from data-* attributes
+            // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+            // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+            var modal = $(this)
+            modal.find('.modal-title').text('New message to ' + recipient)
+            modal.find('.modal-body input').val(recipient)
+        })
+
+
+
+    </script>
+    <input type="checkbox" onClick="toggleCheckbox(this)" /> Toggle All
+    <button type="button" class="btn btn-success" onclick="multiDelete()">delete all</button>
+    <table id="example" class="table table-striped table-bordered" style="width:100%">
+        <thead>
+
+            <tr>
+                <th>Select</th>
+                <th>ProductID</th>
+                <th>ProductName</th>
+                <th>Category</th>
+                <th>UnitType</th>
+                <th>Price</th>
+                <th>MinValue</th>
+                <th>MaxValue</th>
+                <th>ProductStatus</th>
+                <th>ImgProduct</th>
+                <th>Amount</th>
+                <th>SITES</th>
+                <th>EDIT</th>
+                <th>DELETE</th>
+            </tr>
+        </thead>
+        <tfoot>
+            <tr>
+                <th>Select</th>
+                <th>ProductID</th>
+                <th>ProductName</th>
+                <th>Category</th>
+                <th>UnitType</th>
+                <th>Price</th>
+                <th>MinValue</th>
+                <th>MaxValue</th>
+                <th>ProductStatus</th>
+                <th>ImgProduct</th>
+                <th>Amount</th>
+                <th>SITES</th>
+                <th>EDIT</th>
+                <th>DELETE</th>
+            </tr>
+        </tfoot>
+    </table>
+
+    <!-- The Modal -->
+    <div class="modal" id="myModal">
+
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Edit</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    editProductID: <input type="text" class="form-control" id="editProductID">
+                    editProductName: <input type="text" class="form-control" id="editProductName">
+                    editCategory: <input type="text" class="form-control" id="editCategory">
+                    editUnitType: <input type="text" class="form-control" id="editUnitType">
+                    editPrice: <input type="text" class="form-control" id="editPrice">
+                    editMinValue: <input type="text" class="form-control" id="editMinValue">
+                    editMaxValue: <input type="text" class="form-control" id="editMaxValue">
+                    editProductStatus: <input type="text" class="form-control" id="editProductStatus">
+                    editAmount: <input type="text" class="form-control" id="editAmount">
+                    editSITES: <input type="text" class="form-control" id="editSITES">
+                    editImgProduct: <input type="text" class="form-control" id="editImgProduct">
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" data-dismiss="modal">Save</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+
+
+
+
+
+    <button id="proces_reload" class="btn btn-danger" onclick="btnDelete()">reload</button>
+
+    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModalAddNew">Add New Product
+    </button>
+
+    <!-- The Modal -->
+    <div class="modal" id="myModalAddNew">
+
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Add New Product</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <div id="loader" style="display:none;"> </div>
+                <!-- Modal body -->
+
+                    <div class="modal-body">
+                        ProductID: <input type="text" class="form-control" id="addProductID">
+                        ProductName: <input type="text" class="form-control" id="addProductName">
+                        Category: <input type="text" class="form-control" id="addCategory">
+                        UnitType: <input type="text" class="form-control" id="addUnitType">
+                        Price: <input type="text" class="form-control" id="addPrice">
+                        MinValue: <input type="text" class="form-control" id="addMinValue">
+                        MaxValue: <input type="text" class="form-control" id="addMaxValue">
+                        <!-- ProductStatus: <input type="text" class="form-control" id="addProductStatus"> -->
+                        Amount: <input type="text" class="form-control" id="addAmount">
+                        <!-- SITES: <input type="text" class="form-control" id="addSITES"> -->
+                        <input type="hidden" class="form-control" id="addImgProduct">
+                        ImgProduct:
+                        <div class="form-group">
+                            <input type="file" id="myfileUpload" /><br>
+                            <center><img id="blah" height="200" src="#" alt="your image" /></center>
+
+                        </div>
+
+
+                    </div>
+               
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" onclick="addNewProduct()">Save</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+
+
+
+</body>
+
+</html>
